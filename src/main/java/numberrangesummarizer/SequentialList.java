@@ -3,6 +3,8 @@ package numberrangesummarizer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -37,10 +39,64 @@ public class SequentialList implements NumberRangeSummarizer {
      * @return Collection<Integer>
      */
     public Collection<Integer> dropFirst(Collection<Integer> collection) {
-        return collection
-            .stream()
-            .skip(1)
-            .collect(Collectors.toList()); 
+        if (collection == null) {
+            return Collections.emptyList(); 
+        } else if (collection.isEmpty() || collection.size() == 1) {
+            return collection;
+        } else {
+            return collection
+                .stream()
+                .skip(1)
+                .collect(Collectors.toList()); 
+        }
+    }
+
+    /**
+     * Checks if collection is strictly in ascending order
+     * 
+     * @param collection
+     * @return Boolean
+     */
+    public Boolean isCollectionInOrder(Collection<Integer> collection){
+        if (collection == null) {
+            return false; 
+        } else{
+            Integer largest = Integer.MIN_VALUE;
+    
+            for(Integer current : collection){
+                if(current > largest){
+                    largest = current;
+                } else{
+                    return false;
+                }
+            }
+    
+            return true;
+        }
+    }
+
+    /**
+     * Checks if collection has any duplicates
+     * 
+     * @param collection
+     * @return Boolean
+     */
+    public Boolean areThereDuplicatesInCollection(Collection<Integer> collection){
+        if (collection == null) {
+            return false; 
+        } else {
+            Set<Integer> collectionValues = new HashSet<>();
+    
+            for(Integer current : collection){
+                if(collectionValues.contains(current)){
+                    return true;
+                } else{
+                    collectionValues.add(current);
+                }
+            }
+    
+            return false;
+        }
     }
 
     /**
@@ -80,8 +136,12 @@ public class SequentialList implements NumberRangeSummarizer {
     public String summarizeCollection(Collection<Integer> input) {
         if (input == null || input.isEmpty()) {
             return "";
-        } else if(input.size() == 1) {
+        } else if (input.size() == 1) {
             return String.valueOf(input.iterator().next());
+        } else if (!this.isCollectionInOrder(input)) {
+            return "";
+        } else if (this.areThereDuplicatesInCollection(input)) {
+            return "";
         } else {
             return this.buildCommaDelimitedSequentialList(input);
         }
