@@ -3,6 +3,7 @@ package numberrangesummarizer;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -11,21 +12,21 @@ public class SequentialListTest {
     public void emptyListCollection() {
         String input = "";
         SequentialList sequentialList = new SequentialList();
-        assertEquals("The expected value is ", Arrays.asList(), sequentialList.collect(input));
+        assertEquals("The expected value is ", Collections.emptyList(), sequentialList.collect(input));
     }
 
     @Test
     public void whitespaceListCollection() {
         String input = "  ";
         SequentialList sequentialList = new SequentialList();
-        assertEquals("The expected value is ", Arrays.asList(), sequentialList.collect(input));
+        assertEquals("The expected value is ", Collections.emptyList(), sequentialList.collect(input));
     }
 
     @Test
     public void nullListCollection() {
         String input = null;
         SequentialList sequentialList = new SequentialList();
-        assertEquals("The expected value is ", Arrays.asList(), sequentialList.collect(input));
+        assertEquals("The expected value is ", Collections.emptyList(), sequentialList.collect(input));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class SequentialListTest {
         assertEquals(
             "The expected value is \"\"", 
             "", 
-            sequentialList.summarizeCollection(Arrays.asList())
+            sequentialList.summarizeCollection(Collections.emptyList())
         );
     }
 
@@ -99,12 +100,102 @@ public class SequentialListTest {
     }
 
     @Test
+    public void filtersOutFirstElementButListIsNull(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"\"", 
+            Collections.emptyList(), 
+            sequentialList.dropFirst(null)
+        );
+    }
+
+    @Test
+    public void filtersOutFirstElementButListIsEmpty(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"\"", 
+            Collections.emptyList(), 
+            sequentialList.dropFirst(Collections.emptyList())
+        );
+    }
+
+    @Test
+    public void filtersOutFirstElementButListHasOneElement(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"1\"", 
+            Arrays.asList(1), 
+            sequentialList.dropFirst(Arrays.asList(1))
+        );
+    }
+
+    @Test
     public void filtersOutFirstElement(){
         SequentialList sequentialList = new SequentialList();
         assertEquals(
             "The expected value is \"2\"", 
             Arrays.asList(2), 
-            sequentialList.filterOutFirstElementFromCollection(Arrays.asList(1,2))
+            sequentialList.dropFirst(Arrays.asList(1,2))
+        );
+    }
+
+    @Test
+    public void checkIfCollectionIsInOrderButCollectionIsNull(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"false\"", 
+            false, 
+            sequentialList.isCollectionInOrder(null)
+        );
+    }
+
+    @Test
+    public void checkIfCollectionIsInOrder(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"true\"", 
+            true, 
+            sequentialList.isCollectionInOrder(Arrays.asList(1,2,3,4,5,6,7,8,9,10))
+        );
+    }
+
+    @Test
+    public void checkIfCollectionIsNotInOrder(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"false\"", 
+            false, 
+            sequentialList.isCollectionInOrder(Arrays.asList(10,5,3,2,1))
+        );
+    }
+
+    @Test
+    public void checkIfCollectionHasDuplicatesButCollectionIsNull(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"false\"", 
+            false, 
+            sequentialList.areThereDuplicatesInCollection(null)
+        );
+    }
+
+    @Test
+    public void checkIfCollectionHasDuplicates(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"false\"", 
+            false, 
+            sequentialList.areThereDuplicatesInCollection(Arrays.asList(1,2,3,4,5,6,7,8,9,10))
+        );
+    }
+
+    @Test
+    public void checkIfCollectionHasDuplicatesWithDuplicates(){
+        SequentialList sequentialList = new SequentialList();
+        assertEquals(
+            "The expected value is \"true\"", 
+            true, 
+            sequentialList.areThereDuplicatesInCollection(Arrays.asList(1,2,3,4,4,4,5))
         );
     }
 
